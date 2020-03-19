@@ -8,3 +8,4 @@
 *.out
 vendor/
 *~
+workday-counter-*.tar.*

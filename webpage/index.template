@@ -7,7 +7,7 @@
       <div id="info">
 	<table>
 	  <tr>
-	    <td width="10%">
+	    <td width="20%">
 	      &nbsp;
 	    </td>
 	    <td>
@@ -15,7 +15,7 @@
 		<a href="https://suse.com"><img src="SUSE-Logo.png"/></a>
 	      </div>
 	    </td>
-	    <td width="80%">
+	    <td width="60%">
 	      &nbsp;
 	    </td>
 	    <td>
@@ -23,7 +23,7 @@
 		<a href="https://kubic.opensuse.org"><img src="openSUSE-Kubic-Logo.png"/></a>
 	      </div>
 	    </td>
-	    <td width="10%">
+	    <td width="20%">
 	      &nbsp;
 	    </td>
 	  </tr>
