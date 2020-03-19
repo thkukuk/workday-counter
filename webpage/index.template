@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <title>{{.Title}}</title>
+  </head>
+  <body>
+    <section>
+      <div id="info">
+	<table>
+	  <tr>
+	    <td width="10%">
+	      &nbsp;
+	    </td>
+	    <td>
+	      <div class="image">
+		<a href="https://suse.com"><img src="SUSE-Logo.png"/></a>
+	      </div>
+	    </td>
+	    <td width="80%">
+	      &nbsp;
+	    </td>
+	    <td>
+	      <div class="image">
+		<a href="https://kubic.opensuse.org"><img src="openSUSE-Kubic-Logo.png"/></a>
+	      </div>
+	    </td>
+	    <td width="10%">
+	      &nbsp;
+	    </td>
+	  </tr>
+	</table>
+      </div>
+      <div class="content">
+	<div id="message">
+	  {{.Message}}: {{.Workdays}}
+	</div>
+	<div id="info">
+	  <table>
+	    <tr>
+	      <td width="50%">
+		&nbsp;
+	      </td>
+	      <td>
+		<table>
+		  <tr>
+		    <th>Workdays:</th>
+		    <td>{{.Workdays}}</td>
+		  </tr>
+		  <tr>
+		    <th>Since:</th>
+		    <td>{{.StartDate}}</td>
+		  </tr>
+		  <tr>
+		    <th>{{.EndDateLabel}}:</th>
+		    <td>{{.EndDate}}</td>
+		  </tr>
+		</table>
+	      </td>
+	    </tr>
+	  </table>
+	</div>
+      </div>
+    </section>
+    <style>
+      body {
+        text-align: center;
+        background: #303030;
+        color: #f2f2f2;
+      }
+      div.image {
+        margin: 40px 0;
+      }
+      div.content {
+        color: #f2f2f2
+      }
+      .content #message {
+        margin: 10px 0 50px 0;
+        padding: 30px 0;
+        font-size: 32pt;
+        background-color: #505050;
+        border-top: 2px solid #909090;
+        border-bottom: 2px solid #909090;
+      }
+      .content #info {
+        margin: 0 auto;
+        font-size: 12pt;
+      }
+      .content #info table {
+        margin: 10px auto;
+      }
+      .content #info table th {
+        text-align: right;
+        padding-right: 20px;
+      }
+      .content #info table td {
+        text-align: left;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+# workday-counter
+workday-counter POD
+
+![Screenshot](images/Workday-Counter-Screenshot.png "Screenshot")
+
+This POD consisting of one container image can be deployed on a
+Kubernetes cluster and accessed via a load balancer. It displays:
+  * The SUSE and openSUSE Kubic logos
+  * A message with the number of working days
+  * Start and end date
+
+The default port is 80 and can be changed in the service section of the yaml
+file. 
+
+To deploy: ``kubectl apply -f https://raw.githubusercontent.com/thkukuk/workday-counter/master/yaml/workday-counter.yaml``
+
+The image is available from registry.opensuse.org: 
+`registry.opensuse.org/home/kukuk/container/container/workday-counter:latest`
