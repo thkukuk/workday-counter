@@ -29,8 +29,10 @@ var (
 	indexTemplate *template.Template
 	title = "Workday-Counter"
 	message = "Workdays"
-	startDate = time.Date(2020, time.March, 13, 0, 0, 0, 1, time.UTC)
-	endDateLabel = "Today"
+	workdaysLabel = "Workdays"
+	startDateLabel = "Since"
+	startDate = time.Now()
+	endDateLabel = "Until"
 	endDate = time.Now()
 	dir *string
 )
@@ -61,9 +63,28 @@ func main() {
 		*dir = *dir + "/"
 	}
 	indexTemplate = template.Must(template.ParseFiles(*dir + "index.template"))
+	if len(os.Getenv("TITLE")) > 0 {
+		title = os.Getenv("TITLE")
+	}
 	if len(os.Getenv("MESSAGE")) > 0 {
 		message = os.Getenv("MESSAGE")
 	}
+	if len(os.Getenv("WORKDAYS_LABEL")) > 0 {
+		workdaysLabel = os.Getenv("WORKDAYS_LABEL")
+	}
+	if len(os.Getenv("STARTDATE")) > 0 {
+		startDate, _ = time.Parse("2006-01-02", os.Getenv("STARTDATE"))
+	}
+	if len(os.Getenv("ENDDATE")) > 0 {
+		endDate, _ = time.Parse("2006-01-02", os.Getenv("ENDDATE"))
+	}
+	if len(os.Getenv("STARTDATE_LABEL")) > 0 {
+		startDateLabel = os.Getenv("STARTDATE_LABEL")
+	}
+	if len(os.Getenv("ENDDATE_LABEL")) > 0 {
+		endDateLabel = os.Getenv("ENDDATE_LABEL")
+	}
+
 	log.Printf("Workday-Counter %s started\n", version)
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/openSUSE-Kubic-Logo.png",
@@ -80,12 +101,14 @@ func main() {
 }
 
 type TemplateArgs struct {
-	Title     string
-	Message   string
-        Workdays  string
-	StartDate string
-	EndDateLabel string
-	EndDate   string
+	Title          string
+	Message        string
+	WorkdaysLabel  string
+        Workdays       string
+	StartDateLabel string
+	StartDate      string
+	EndDateLabel   string
+	EndDate        string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -94,7 +117,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	indexTemplate.Execute(w, TemplateArgs{
 		Title:             title,
 		Message:           message,
+		WorkdaysLabel:     workdaysLabel,
 		Workdays:          strconv.Itoa(workdays),
+		StartDateLabel:    startDateLabel,
 		StartDate:         startDate.Format("January 02, 2006"),
 		EndDateLabel:      endDateLabel,
 		EndDate:           endDate.Format("January 02, 2006"),

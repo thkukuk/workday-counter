@@ -42,11 +42,11 @@
 	      <td>
 		<table>
 		  <tr>
-		    <th>Workdays:</th>
+		    <th>{{.WorkdaysLabel}}:</th>
 		    <td>{{.Workdays}}</td>
 		  </tr>
 		  <tr>
-		    <th>Since:</th>
+		    <th>{{.StartDateLabel}}:</th>
 		    <td>{{.StartDate}}</td>
 		  </tr>
 		  <tr>
