@@ -3,7 +3,7 @@ workday-counter POD
 
 ![Screenshot](images/Workday-Counter-Screenshot.png "Screenshot")
 
-This POD consisting of one container image can be deployed on a
+This POD consist of a container image which can be deployed on a
 Kubernetes cluster and accessed via a load balancer. It displays:
   * The SUSE and openSUSE Kubic logos
   * A message with the number of working days
