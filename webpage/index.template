@@ -36,11 +36,48 @@
 	<div id="info">
 	  <table>
 	    <tr>
-	      <td width="50%">
+	      {{if .Workdays1}}
+	      <td width="33%">
 		&nbsp;
 	      </td>
 	      <td>
 		<table>
+		  {{if .Workdays1Title}}
+		  <tr>
+		    <th colspan="2" style="text-align:center">
+		      {{.Workdays1Title}}
+		    </th>
+		  </tr>
+		  {{end}}
+		  <tr>
+		    <th>{{.Workdays1Label}}:</th>
+		    <td>{{.Workdays1}}</td>
+		  </tr>
+		  <tr>
+		    <th>{{.StartDate1Label}}:</th>
+		    <td>{{.StartDate1}}</td>
+		  </tr>
+		  <tr>
+		    <th>{{.EndDate1Label}}:</th>
+		    <td>{{.EndDate1}}</td>
+		  </tr>
+		</table>
+	      </td>
+	      <td width="10%">
+		&nbsp;
+	      </td>
+	      {{else}}
+	      <td width="50%">
+		&nbsp;
+	      </td>
+	      {{end}}
+	      <td>
+		<table>
+		  {{if .WorkdaysTitle}}
+		  <tr>
+		    <th colspan="2" style="text-align:center">{{.WorkdaysTitle}}</th>
+		  </tr>
+		  {{end}}
 		  <tr>
 		    <th>{{.WorkdaysLabel}}:</th>
 		    <td>{{.Workdays}}</td>

@@ -33,9 +33,11 @@ spec:
         imagePullPolicy: Always
         env:
         - name: TITLE
-          value: "Homeoffice Days"
+          value: "Homeoffice Days Germany"
         - name: MESSAGE
           value: "Survived working days in homeoffice"
+        - name: WORKDAYS_TITLE
+          value: "Germany"
         - name: WORKDAYS_LABEL
           value: "Workdays"
         - name: STARTDATE_LABEL
@@ -45,4 +47,16 @@ spec:
         - name: ENDDATE_LABEL
           value: "Today"
         #- name: ENDDATE
+        #  value: "2020-0X-XX"
+        - name: WORKDAYS1_TITLE
+          value: "China"
+        - name: WORKDAYS1_LABEL
+          value: "Workdays"
+        - name: STARTDATE1_LABEL
+          value: "Since"
+        - name: STARTDATE1
+          value: "2020-02-03"
+        - name: ENDDATE1_LABEL
+          value: "Today"
+        #- name: ENDDATE1
         #  value: "2020-0X-XX"

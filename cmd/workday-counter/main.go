@@ -29,11 +29,18 @@ var (
 	indexTemplate *template.Template
 	title = "Workday-Counter"
 	message = "Workdays"
+	workdaysTitle = ""
 	workdaysLabel = "Workdays"
 	startDateLabel = "Since"
 	startDate = time.Now()
 	endDateLabel = "Until"
 	endDate = time.Now()
+	workdays1Title = ""
+	workdays1Label = "Workdays"
+	startDate1Label = "Since"
+	startDate1 time.Time
+	endDate1Label = "Until"
+	endDate1 = time.Now()
 	dir *string
 )
 
@@ -69,6 +76,9 @@ func main() {
 	if len(os.Getenv("MESSAGE")) > 0 {
 		message = os.Getenv("MESSAGE")
 	}
+	if len(os.Getenv("WORKDAYS_TITLE")) > 0 {
+		workdaysTitle = os.Getenv("WORKDAYS_TITLE")
+	}
 	if len(os.Getenv("WORKDAYS_LABEL")) > 0 {
 		workdaysLabel = os.Getenv("WORKDAYS_LABEL")
 	}
@@ -83,6 +93,24 @@ func main() {
 	}
 	if len(os.Getenv("ENDDATE_LABEL")) > 0 {
 		endDateLabel = os.Getenv("ENDDATE_LABEL")
+	}
+	if len(os.Getenv("WORKDAYS1_TITLE")) > 0 {
+		workdays1Title = os.Getenv("WORKDAYS1_TITLE")
+	}
+	if len(os.Getenv("WORKDAYS1_LABEL")) > 0 {
+		workdays1Label = os.Getenv("WORKDAYS1_LABEL")
+	}
+	if len(os.Getenv("STARTDATE1")) > 0 {
+		startDate1, _ = time.Parse("2006-01-02", os.Getenv("STARTDATE1"))
+	}
+	if len(os.Getenv("ENDDATE1")) > 0 {
+		endDate1, _ = time.Parse("2006-01-02", os.Getenv("ENDDATE1"))
+	}
+	if len(os.Getenv("STARTDATE1_LABEL")) > 0 {
+		startDate1Label = os.Getenv("STARTDATE1_LABEL")
+	}
+	if len(os.Getenv("ENDDATE1_LABEL")) > 0 {
+		endDate1Label = os.Getenv("ENDDATE1_LABEL")
 	}
 
 	log.Printf("Workday-Counter %s started\n", version)
@@ -101,27 +129,51 @@ func main() {
 }
 
 type TemplateArgs struct {
-	Title          string
-	Message        string
-	WorkdaysLabel  string
-        Workdays       string
-	StartDateLabel string
-	StartDate      string
-	EndDateLabel   string
-	EndDate        string
+	Title           string
+	Message         string
+	WorkdaysTitle   string
+	WorkdaysLabel   string
+        Workdays        string
+	StartDateLabel  string
+	StartDate       string
+	EndDateLabel    string
+	EndDate         string
+	Workdays1Title  string
+	Workdays1Label  string
+        Workdays1       string
+	StartDate1Label string
+	StartDate1      string
+	EndDate1Label   string
+	EndDate1        string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	workdays := CalcBusinessDays(startDate,endDate)
 
+	var workdays1 int
+	var workdays1_str string
+	var t time.Time
+	if t != startDate1 {
+		workdays1 = CalcBusinessDays(startDate1, endDate1)
+		workdays1_str = strconv.Itoa(workdays1)
+	}
+
 	indexTemplate.Execute(w, TemplateArgs{
 		Title:             title,
 		Message:           message,
+		WorkdaysTitle:     workdaysTitle,
 		WorkdaysLabel:     workdaysLabel,
 		Workdays:          strconv.Itoa(workdays),
 		StartDateLabel:    startDateLabel,
 		StartDate:         startDate.Format("January 02, 2006"),
 		EndDateLabel:      endDateLabel,
 		EndDate:           endDate.Format("January 02, 2006"),
+		Workdays1Title:    workdays1Title,
+		Workdays1Label:    workdays1Label,
+		Workdays1:         workdays1_str,
+		StartDate1Label:   startDate1Label,
+		StartDate1:        startDate1.Format("January 02, 2006"),
+		EndDate1Label:     endDate1Label,
+		EndDate1:          endDate1.Format("January 02, 2006"),
 	})
 }
