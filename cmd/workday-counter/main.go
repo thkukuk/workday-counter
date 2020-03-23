@@ -158,7 +158,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		workdays1_str = strconv.Itoa(workdays1)
 	}
 
-	indexTemplate.Execute(w, TemplateArgs{
+	err := indexTemplate.Execute(w, TemplateArgs{
 		Title:             title,
 		Message:           message,
 		WorkdaysTitle:     workdaysTitle,
@@ -176,4 +176,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		EndDate1Label:     endDate1Label,
 		EndDate1:          endDate1.Format("January 02, 2006"),
 	})
+	if err != nil {
+		log.Println("Error executing template:", err)
+        }
 }

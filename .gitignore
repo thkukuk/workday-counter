@@ -7,5 +7,6 @@
 *.test
 *.out
 vendor/
+bin/
 *~
 workday-counter-*.tar.*
