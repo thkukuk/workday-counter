@@ -123,6 +123,10 @@ func main() {
 		func (w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, *dir + "SUSE-Logo.png")
 		})
+        http.HandleFunc("/SUSE-Logo.svg",
+                func (w http.ResponseWriter, r *http.Request) {
+                        http.ServeFile(w, r, *dir + "SUSE-Logo.svg")
+                })
 	server := &http.Server{Addr: ":8080"}
 	server.SetKeepAlivesEnabled(false)
 	log.Fatal(server.ListenAndServe())
