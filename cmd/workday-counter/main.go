@@ -115,17 +115,13 @@ func main() {
 
 	log.Printf("Workday-Counter %s started\n", version)
 	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/openSUSE-Kubic-Logo.png",
+	http.HandleFunc("/fonts/",
 		func (w http.ResponseWriter, r *http.Request) {
-			http.ServeFile(w, r, *dir + "openSUSE-Kubic-Logo.png")
+			http.ServeFile(w, r, *dir + r.URL.Path[1:])
 		})
-	http.HandleFunc("/SUSE-Logo.png",
-		func (w http.ResponseWriter, r *http.Request) {
-			http.ServeFile(w, r, *dir + "SUSE-Logo.png")
-		})
-        http.HandleFunc("/SUSE-Logo.svg",
+        http.HandleFunc("/logos/",
                 func (w http.ResponseWriter, r *http.Request) {
-                        http.ServeFile(w, r, *dir + "SUSE-Logo.svg")
+                        http.ServeFile(w, r, *dir + r.URL.Path[1:])
                 })
 	server := &http.Server{Addr: ":8080"}
 	server.SetKeepAlivesEnabled(false)

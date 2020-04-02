@@ -12,7 +12,7 @@
 	    </td>
 	    <td>
 	      <div class="image">
-		<a href="https://suse.com"><img src="SUSE-Logo.svg"/></a>
+		<a href="https://suse.com"><img src="/logos/SUSE-Logo.svg"/></a>
 	      </div>
 	    </td>
 	    <td width="60%">
@@ -20,7 +20,7 @@
 	    </td>
 	    <td>
 	      <div class="image">
-		<a href="https://kubic.opensuse.org"><img src="openSUSE-Kubic-Logo.png"/></a>
+		<a href="https://kubic.opensuse.org"><img src="/logos/openSUSE-Kubic-Logo.png"/></a>
 	      </div>
 	    </td>
 	    <td width="20%">
@@ -98,28 +98,62 @@
       </div>
     </section>
     <style>
+      @font-face {
+        font-family: 'work';
+        font-weight: 300;
+        src: url(/fonts/WorkSans-Light.ttf) format('truetype');
+      }
+      @font-face {
+        font-family: 'work';
+        font-weight: 400;
+        src: url(/fonts/WorkSans-Regular.ttf) format('truetype');
+      }
+      @font-face {
+        font-family: 'work';
+        font-weight: 500;
+        src: url(/fonts/WorkSans-Medium.ttf) format('truetype');
+      }
+      @font-face {
+        font-family: 'work';
+        font-weight: 600;
+        src: url(/fonts/WorkSans-SemiBold.ttf) format('truetype');
+      }
+      @font-face {
+        font-family: 'work';
+        font-weight: 700;
+        src: url(/fonts/WorkSans-Bold.ttf) format('truetype');
+      }
+      @font-face {
+        font-family: 'work';
+        font-weight: 800;
+        src: url(/fonts/WorkSans-ExtraBold.ttf) format('truetype');
+      }
       body {
+        font-family:'work', Arial, sans-serif;
         text-align: center;
-        background: #303030;
-        color: #f2f2f2;
+        background: #0c322c;
+        color: white;
       }
       div.image {
         margin: 40px 0;
       }
       div.content {
-        color: #f2f2f2
+        color: white;
       }
       .content #message {
         margin: 10px 0 50px 0;
         padding: 30px 0;
         font-size: 32pt;
-        background-color: #505050;
-        border-top: 2px solid #909090;
-        border-bottom: 2px solid #909090;
+        font-weight: 500;
+        color: black;
+        background-color: #74d4aa;
+        border-top: 0px solid #909090;
+        border-bottom: 0px solid #909090;
       }
       .content #info {
         margin: 0 auto;
         font-size: 12pt;
+        font-weight: 300;
       }
       .content #info table {
         margin: 10px auto;
