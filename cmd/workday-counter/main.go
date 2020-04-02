@@ -22,6 +22,9 @@ import (
 	"text/template"
 	"time"
 	"strconv"
+	"strings"
+
+	"github.com/rickar/cal"
 )
 
 var (
@@ -29,12 +32,16 @@ var (
 	indexTemplate *template.Template
 	title = "Workday-Counter"
 	message = "Workdays"
+	country = "Germany"
+	state = "Bayern"
 	workdaysTitle = ""
 	workdaysLabel = "Workdays"
 	startDateLabel = "Since"
 	startDate = time.Now()
 	endDateLabel = "Until"
 	endDate = time.Now()
+	country1 = ""
+	state1 = ""
 	workdays1Title = ""
 	workdays1Label = "Workdays"
 	startDate1Label = "Since"
@@ -48,33 +55,50 @@ func init() {
 	dir = flag.String ("dir", "", "directory to read files from")
 }
 
-func CalcBusinessDays(from time.Time, to time.Time) int {
-	totalDays := float32(to.Sub(from) / (24 * time.Hour))
-	weekDays := float32(from.Weekday()) - float32(to.Weekday())
-	businessDays := int(1 + (totalDays*5-weekDays*2)/7)
+func CalcBusinessDays(country string, state string,
+	from time.Time, to time.Time) int64 {
 
-	if to.Weekday() == time.Saturday {
-		businessDays--
+	c := cal.NewCalendar()
+	// change the holiday calculation behavior
+	c.Observed = cal.ObservedExact
+
+	if strings.EqualFold(country, "Germany") {
+		// add holidays for the business
+		cal.AddGermanHolidays(c)
+		if strings.EqualFold(state, "Bayern") {
+			// Nuremberg does not have Maria Himmelfahrt...
+			c.AddHoliday(
+				cal.DEHeiligeDreiKoenige,
+				cal.DEFronleichnam,
+				// cal.DEMariaHimmelfahrt,
+				cal.DEAllerheiligen,
+				cal.DEReformationstag2017,
+			)
+		}
+	} else if strings.EqualFold(country, "China") {
+		// Chinese holiday definition is missing
+	} else {
+		log.Printf("Unknown Country: %s, ignoring holidays\n",
+			country)
 	}
 
-	if from.Weekday() == time.Sunday {
-		businessDays--
-	}
-
-	return businessDays
+	return c.CountWorkdays(from, to)
 }
 
 func main() {
 	flag.Parse()
-	if len(*dir) > 0 {
-		*dir = *dir + "/"
-	}
-	indexTemplate = template.Must(template.ParseFiles(*dir + "index.template"))
+	indexTemplate = template.Must(template.ParseFiles(*dir + "/index.template"))
 	if len(os.Getenv("TITLE")) > 0 {
 		title = os.Getenv("TITLE")
 	}
 	if len(os.Getenv("MESSAGE")) > 0 {
 		message = os.Getenv("MESSAGE")
+	}
+	if len(os.Getenv("COUNTRY")) > 0 {
+		country = os.Getenv("COUNTRY")
+	}
+	if len(os.Getenv("STATE")) > 0 {
+		state = os.Getenv("STATE")
 	}
 	if len(os.Getenv("WORKDAYS_TITLE")) > 0 {
 		workdaysTitle = os.Getenv("WORKDAYS_TITLE")
@@ -93,6 +117,12 @@ func main() {
 	}
 	if len(os.Getenv("ENDDATE_LABEL")) > 0 {
 		endDateLabel = os.Getenv("ENDDATE_LABEL")
+	}
+	if len(os.Getenv("COUNTRY1")) > 0 {
+		country1 = os.Getenv("COUNTRY1")
+	}
+	if len(os.Getenv("STATE1")) > 0 {
+		state1 = os.Getenv("STATE1")
 	}
 	if len(os.Getenv("WORKDAYS1_TITLE")) > 0 {
 		workdays1Title = os.Getenv("WORKDAYS1_TITLE")
@@ -117,11 +147,11 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/fonts/",
 		func (w http.ResponseWriter, r *http.Request) {
-			http.ServeFile(w, r, *dir + r.URL.Path[1:])
+			http.ServeFile(w, r, *dir + r.URL.Path)
 		})
         http.HandleFunc("/logos/",
                 func (w http.ResponseWriter, r *http.Request) {
-                        http.ServeFile(w, r, *dir + r.URL.Path[1:])
+                        http.ServeFile(w, r, *dir + r.URL.Path)
                 })
 	server := &http.Server{Addr: ":8080"}
 	server.SetKeepAlivesEnabled(false)
@@ -148,14 +178,15 @@ type TemplateArgs struct {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	workdays := CalcBusinessDays(startDate,endDate)
+	workdays := CalcBusinessDays(country, state, startDate, endDate)
 
-	var workdays1 int
+	var workdays1 int64
 	var workdays1_str string
 	var t time.Time
 	if t != startDate1 {
-		workdays1 = CalcBusinessDays(startDate1, endDate1)
-		workdays1_str = strconv.Itoa(workdays1)
+		workdays1 = CalcBusinessDays(country1, state1,
+			startDate1, endDate1)
+		workdays1_str = strconv.FormatInt(workdays1, 10)
 	}
 
 	err := indexTemplate.Execute(w, TemplateArgs{
@@ -163,7 +194,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		Message:           message,
 		WorkdaysTitle:     workdaysTitle,
 		WorkdaysLabel:     workdaysLabel,
-		Workdays:          strconv.Itoa(workdays),
+		Workdays:          strconv.FormatInt(workdays, 10),
 		StartDateLabel:    startDateLabel,
 		StartDate:         startDate.Format("January 02, 2006"),
 		EndDateLabel:      endDateLabel,
