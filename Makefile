@@ -36,7 +36,8 @@ help: ## Display this help screen
 release: ## create release package from git
 	git clone https://github.com/thkukuk/workday-counter
 	mv workday-counter workday-counter-$(VERSION)
-	#sed -i -e 's|USE_VENDOR =|USE_VENDOR = -mod vendor|g' workday-counter-$(VERSION)/Makefile
-	#make -C workday-counter-$(VERSION) vendor
+	sed -i -e 's|USE_VENDOR =|USE_VENDOR = -mod vendor|g' workday-counter-$(VERSION)/Makefile
+	make -C workday-counter-$(VERSION) vendor
+	cp VERSION workday-counter-$(VERSION)
 	tar --exclude .git -cJf workday-counter-$(VERSION).tar.xz workday-counter-$(VERSION)
 	rm -rf workday-counter-$(VERSION)
