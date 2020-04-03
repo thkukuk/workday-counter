@@ -61,6 +61,9 @@
 		    <th>{{.EndDate1Label}}:</th>
 		    <td>{{.EndDate1}}</td>
 		  </tr>
+		  <tr>
+		    <th>Weeks:</th>
+                    <td>{{.Weeks1}}</td>
 		</table>
 	      </td>
 	      <td width="10%">
@@ -89,6 +92,10 @@
 		  <tr>
 		    <th>{{.EndDateLabel}}:</th>
 		    <td>{{.EndDate}}</td>
+		  </tr>
+		  <tr>
+		    <th>Weeks:</th>
+		    <td>{{.Weeks}}</td>
 		  </tr>
 		</table>
 	      </td>

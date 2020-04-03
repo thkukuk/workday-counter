@@ -23,6 +23,7 @@ import (
 	"time"
 	"strconv"
 	"strings"
+	"fmt"
 
 	"github.com/rickar/cal"
 )
@@ -56,7 +57,7 @@ func init() {
 }
 
 func CalcBusinessDays(country string, state string,
-	from time.Time, to time.Time) int64 {
+	from time.Time, to time.Time) (int64, *cal.Calendar) {
 
 	c := cal.NewCalendar()
 	// change the holiday calculation behavior
@@ -82,7 +83,18 @@ func CalcBusinessDays(country string, state string,
 			country)
 	}
 
-	return c.CountWorkdays(from, to)
+	return c.CountWorkdays(from, to), c
+}
+
+func date2str(cal *cal.Calendar, date time.Time) string {
+	if cal == nil {
+		return ""
+	}
+	if cal.IsWorkday(date) {
+		return date.Format("January 02, 2006")
+	} else {
+		return date.Format("January 02, 2006") + " (free)"
+	}
 }
 
 func main() {
@@ -168,6 +180,7 @@ type TemplateArgs struct {
 	StartDate       string
 	EndDateLabel    string
 	EndDate         string
+	Weeks           string
 	Workdays1Title  string
 	Workdays1Label  string
         Workdays1       string
@@ -175,11 +188,13 @@ type TemplateArgs struct {
 	StartDate1      string
 	EndDate1Label   string
 	EndDate1        string
+	Weeks1          string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var workdays1 int64
 	var workdays1_str string
+	var cal1 *cal.Calendar
 	var zero_time time.Time
 	if startDate == zero_time {
 		startDate = time.Now()
@@ -187,13 +202,13 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	if endDate == zero_time {
 		endDate = time.Now()
 	}
-	workdays := CalcBusinessDays(country, state, startDate, endDate)
+	workdays, cal := CalcBusinessDays(country, state, startDate, endDate)
 
 	if startDate1 != zero_time {
 		if endDate1 == zero_time {
 			endDate1 = time.Now()
 		}
-		workdays1 = CalcBusinessDays(country1, state1,
+		workdays1, cal1 = CalcBusinessDays(country1, state1,
 			startDate1, endDate1)
 		workdays1_str = strconv.FormatInt(workdays1, 10)
 	}
@@ -205,16 +220,18 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		WorkdaysLabel:     workdaysLabel,
 		Workdays:          strconv.FormatInt(workdays, 10),
 		StartDateLabel:    startDateLabel,
-		StartDate:         startDate.Format("January 02, 2006"),
+		StartDate:         date2str(cal, startDate),
 		EndDateLabel:      endDateLabel,
-		EndDate:           endDate.Format("January 02, 2006"),
+		EndDate:           date2str(cal, endDate),
+		Weeks:             fmt.Sprintf("%.1f", endDate.Sub(startDate).Hours() / (7*24)),
 		Workdays1Title:    workdays1Title,
 		Workdays1Label:    workdays1Label,
 		Workdays1:         workdays1_str,
 		StartDate1Label:   startDate1Label,
-		StartDate1:        startDate1.Format("January 02, 2006"),
+		StartDate1:        date2str(cal1, startDate1),
 		EndDate1Label:     endDate1Label,
-		EndDate1:          endDate1.Format("January 02, 2006"),
+		EndDate1:          date2str(cal1, endDate1),
+		Weeks1:            fmt.Sprintf("%.1f", endDate1.Sub(startDate1).Hours() / (7*24)),
 	})
 	if err != nil {
 		log.Println("Error executing template:", err)
