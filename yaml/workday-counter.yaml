@@ -36,42 +36,42 @@ spec:
           value: "Homeoffice Days Germany"
         - name: MESSAGE
           value: "Survived working days in homeoffice"
-	- name: COUNTRY
-	  value: "Germany"
-	- name: STATE
-	  value: "Bayern"
-	- name: WORKDAYS_TITLE
-          value: "Remaining (Germany, best guess)"
+        - name: COUNTRY
+          value: "Germany"
+        - name: STATE
+          value: "Bayern"
+        - name: WORKDAYS_TITLE
+          value: "Germany"
         - name: WORKDAYS_LABEL
           value: "Workdays"
         - name: STARTDATE_LABEL
-          value: "Today"
-        #- name: STARTDATE
-        #  value: "2020-03-13"
+          value: "Since"
+        - name: STARTDATE
+          value: "2020-03-13"
         - name: ENDDATE_LABEL
-          value: "Until"
-        - name: ENDDATE
-          value: "2020-04-30"
-	- name: COUNTRY1
-	  value: "Germany"
-	- name: STATE1
-	  value: "Bayern"
-	- name: WORKDAYS1_TITLE
+          value: "Today"
+        #- name: ENDDATE
+        #  value: "2020-0X-XX"
+        - name: COUNTRY1
           value: "Germany"
+        - name: STATE1
+          value: "Bayern"
+        - name: WORKDAYS1_TITLE
+          value: "Remaining (Germany, best guess)"
         - name: WORKDAYS1_LABEL
           value: "Workdays"
         - name: STARTDATE1_LABEL
-          value: "Since"
-        - name: STARTDATE1
-          value: "2020-03-13"
-        - name: ENDDATE1_LABEL
           value: "Today"
-        #- name: ENDDATE1
-        #  value: "2020-0X-XX"
-	- name: COUNTRY2
-	  value: "China"
-	#- name: STATE2
-	#  value: ""
+        #- name: STARTDATE1
+        #  value: "2020-03-13"
+        - name: ENDDATE1_LABEL
+          value: "Until"
+        - name: ENDDATE1
+          value: "2020-04-30"
+        - name: COUNTRY2
+          value: "China"
+        #- name: STATE2
+        #  value: ""
         - name: WORKDAYS2_TITLE
           value: "China"
         - name: WORKDAYS2_LABEL
