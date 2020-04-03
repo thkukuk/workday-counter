@@ -190,12 +190,12 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	workdays := CalcBusinessDays(country, state, startDate, endDate)
 
 	if startDate1 != zero_time {
-		workdays1 = CalcBusinessDays(country1, state1,
-			startDate1, endDate1)
-		workdays1_str = strconv.FormatInt(workdays1, 10)
 		if endDate1 == zero_time {
 			endDate1 = time.Now()
 		}
+		workdays1 = CalcBusinessDays(country1, state1,
+			startDate1, endDate1)
+		workdays1_str = strconv.FormatInt(workdays1, 10)
 	}
 
 	err := indexTemplate.Execute(w, TemplateArgs{
