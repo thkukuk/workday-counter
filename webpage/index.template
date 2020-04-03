@@ -37,7 +37,7 @@
 	  <table>
 	    <tr>
 	      {{if .Workdays2}}
-	      <td width="33%">
+	      <td width="20%">
 		&nbsp;
 	      </td>
 	      <td>
