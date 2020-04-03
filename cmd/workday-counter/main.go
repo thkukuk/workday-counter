@@ -37,9 +37,9 @@ var (
 	workdaysTitle = ""
 	workdaysLabel = "Workdays"
 	startDateLabel = "Since"
-	startDate = time.Now()
+	startDate time.Time
 	endDateLabel = "Until"
-	endDate = time.Now()
+	endDate time.Time
 	country1 = ""
 	state1 = ""
 	workdays1Title = ""
@@ -47,7 +47,7 @@ var (
 	startDate1Label = "Since"
 	startDate1 time.Time
 	endDate1Label = "Until"
-	endDate1 = time.Now()
+	endDate1 time.Time
 	dir *string
 )
 
@@ -178,15 +178,24 @@ type TemplateArgs struct {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	workdays := CalcBusinessDays(country, state, startDate, endDate)
-
 	var workdays1 int64
 	var workdays1_str string
-	var t time.Time
-	if t != startDate1 {
+	var zero_time time.Time
+	if startDate == zero_time {
+		startDate = time.Now()
+	}
+	if endDate == zero_time {
+		endDate = time.Now()
+	}
+	workdays := CalcBusinessDays(country, state, startDate, endDate)
+
+	if startDate1 != zero_time {
 		workdays1 = CalcBusinessDays(country1, state1,
 			startDate1, endDate1)
 		workdays1_str = strconv.FormatInt(workdays1, 10)
+		if endDate1 == zero_time {
+			endDate1 = time.Now()
+		}
 	}
 
 	err := indexTemplate.Execute(w, TemplateArgs{
