@@ -49,6 +49,14 @@ var (
 	startDate1 time.Time
 	endDate1Label = "Until"
 	endDate1 time.Time
+	country2 = ""
+	state2 = ""
+	workdays2Title = ""
+	workdays2Label = "Workdays"
+	startDate2Label = "Since"
+	startDate2 time.Time
+	endDate2Label = "Until"
+	endDate2 time.Time
 	dir *string
 )
 
@@ -155,6 +163,31 @@ func main() {
 		endDate1Label = os.Getenv("ENDDATE1_LABEL")
 	}
 
+	if len(os.Getenv("COUNTRY2")) > 0 {
+		country2 = os.Getenv("COUNTRY2")
+	}
+	if len(os.Getenv("STATE2")) > 0 {
+		state2 = os.Getenv("STATE2")
+	}
+	if len(os.Getenv("WORKDAYS2_TITLE")) > 0 {
+		workdays2Title = os.Getenv("WORKDAYS2_TITLE")
+	}
+	if len(os.Getenv("WORKDAYS2_LABEL")) > 0 {
+		workdays2Label = os.Getenv("WORKDAYS2_LABEL")
+	}
+	if len(os.Getenv("STARTDATE2")) > 0 {
+		startDate2, _ = time.Parse("2006-01-02", os.Getenv("STARTDATE2"))
+	}
+	if len(os.Getenv("ENDDATE2")) > 0 {
+		endDate2, _ = time.Parse("2006-01-02", os.Getenv("ENDDATE2"))
+	}
+	if len(os.Getenv("STARTDATE2_LABEL")) > 0 {
+		startDate2Label = os.Getenv("STARTDATE2_LABEL")
+	}
+	if len(os.Getenv("ENDDATE2_LABEL")) > 0 {
+		endDate2Label = os.Getenv("ENDDATE2_LABEL")
+	}
+
 	log.Printf("Workday-Counter %s started\n", version)
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/fonts/",
@@ -189,12 +222,23 @@ type TemplateArgs struct {
 	EndDate1Label   string
 	EndDate1        string
 	Weeks1          string
+	Workdays2Title  string
+	Workdays2Label  string
+        Workdays2       string
+	StartDate2Label string
+	StartDate2      string
+	EndDate2Label   string
+	EndDate2        string
+	Weeks2          string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var workdays1 int64
 	var workdays1_str string
 	var cal1 *cal.Calendar
+	var workdays2 int64
+	var workdays2_str string
+	var cal2 *cal.Calendar
 	var zero_time time.Time
 	if startDate == zero_time {
 		startDate = time.Now()
@@ -204,13 +248,28 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	workdays, cal := CalcBusinessDays(country, state, startDate, endDate)
 
-	if startDate1 != zero_time {
+	if startDate1 != zero_time || endDate1 != zero_time {
+		if startDate1 == zero_time {
+			startDate1 = time.Now()
+		}
 		if endDate1 == zero_time {
 			endDate1 = time.Now()
 		}
 		workdays1, cal1 = CalcBusinessDays(country1, state1,
 			startDate1, endDate1)
 		workdays1_str = strconv.FormatInt(workdays1, 10)
+	}
+
+	if startDate2 != zero_time  || endDate2 != zero_time {
+		if startDate2 == zero_time {
+			startDate2 = time.Now()
+		}
+		if endDate2 == zero_time {
+			endDate2 = time.Now()
+		}
+		workdays2, cal2 = CalcBusinessDays(country2, state2,
+			startDate2, endDate2)
+		workdays2_str = strconv.FormatInt(workdays2, 10)
 	}
 
 	err := indexTemplate.Execute(w, TemplateArgs{
@@ -224,6 +283,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		EndDateLabel:      endDateLabel,
 		EndDate:           date2str(cal, endDate),
 		Weeks:             fmt.Sprintf("%.1f", endDate.Sub(startDate).Hours() / (7*24)),
+
 		Workdays1Title:    workdays1Title,
 		Workdays1Label:    workdays1Label,
 		Workdays1:         workdays1_str,
@@ -232,6 +292,15 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		EndDate1Label:     endDate1Label,
 		EndDate1:          date2str(cal1, endDate1),
 		Weeks1:            fmt.Sprintf("%.1f", endDate1.Sub(startDate1).Hours() / (7*24)),
+
+		Workdays2Title:    workdays2Title,
+		Workdays2Label:    workdays2Label,
+		Workdays2:         workdays2_str,
+		StartDate2Label:   startDate2Label,
+		StartDate2:        date2str(cal2, startDate2),
+		EndDate2Label:     endDate2Label,
+		EndDate2:          date2str(cal2, endDate2),
+		Weeks2:            fmt.Sprintf("%.1f", endDate2.Sub(startDate2).Hours() / (7*24)),
 	})
 	if err != nil {
 		log.Println("Error executing template:", err)
