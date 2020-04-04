@@ -58,6 +58,7 @@ var (
 	endDate2Label = "Until"
 	endDate2 time.Time
 	dir *string
+	zero_time time.Time
 )
 
 func init() {
@@ -232,6 +233,13 @@ type TemplateArgs struct {
 	Weeks2          string
 }
 
+func getDate(date time.Time) time.Time {
+	if date == zero_time {
+		return time.Now()
+	}
+	return date
+}
+
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var workdays1 int64
 	var workdays1_str string
@@ -239,36 +247,19 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var workdays2 int64
 	var workdays2_str string
 	var cal2 *cal.Calendar
-	var zero_time time.Time
-	if startDate == zero_time {
-		startDate = time.Now()
-	}
-	if endDate == zero_time {
-		endDate = time.Now()
-	}
-	workdays, cal := CalcBusinessDays(country, state, startDate, endDate)
+
+	workdays, cal := CalcBusinessDays(country, state,
+		getDate(startDate), getDate(endDate))
 
 	if startDate1 != zero_time || endDate1 != zero_time {
-		if startDate1 == zero_time {
-			startDate1 = time.Now()
-		}
-		if endDate1 == zero_time {
-			endDate1 = time.Now()
-		}
 		workdays1, cal1 = CalcBusinessDays(country1, state1,
-			startDate1, endDate1)
+			getDate(startDate1), getDate(endDate1))
 		workdays1_str = strconv.FormatInt(workdays1, 10)
 	}
 
 	if startDate2 != zero_time  || endDate2 != zero_time {
-		if startDate2 == zero_time {
-			startDate2 = time.Now()
-		}
-		if endDate2 == zero_time {
-			endDate2 = time.Now()
-		}
 		workdays2, cal2 = CalcBusinessDays(country2, state2,
-			startDate2, endDate2)
+			getDate(startDate2), getDate(endDate2))
 		workdays2_str = strconv.FormatInt(workdays2, 10)
 	}
 
@@ -279,28 +270,28 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		WorkdaysLabel:     workdaysLabel,
 		Workdays:          strconv.FormatInt(workdays, 10),
 		StartDateLabel:    startDateLabel,
-		StartDate:         date2str(cal, startDate),
+		StartDate:         date2str(cal, getDate(startDate)),
 		EndDateLabel:      endDateLabel,
-		EndDate:           date2str(cal, endDate),
-		Weeks:             fmt.Sprintf("%.1f", endDate.Sub(startDate).Hours() / (7*24)),
+		EndDate:           date2str(cal, getDate(endDate)),
+		Weeks:             fmt.Sprintf("%.1f", getDate(endDate).Sub(getDate(startDate)).Hours() / (7*24)),
 
 		Workdays1Title:    workdays1Title,
 		Workdays1Label:    workdays1Label,
 		Workdays1:         workdays1_str,
 		StartDate1Label:   startDate1Label,
-		StartDate1:        date2str(cal1, startDate1),
+		StartDate1:        date2str(cal1, getDate(startDate1)),
 		EndDate1Label:     endDate1Label,
-		EndDate1:          date2str(cal1, endDate1),
-		Weeks1:            fmt.Sprintf("%.1f", endDate1.Sub(startDate1).Hours() / (7*24)),
+		EndDate1:          date2str(cal1, getDate(endDate1)),
+		Weeks1:            fmt.Sprintf("%.1f", getDate(endDate1).Sub(getDate(startDate1)).Hours() / (7*24)),
 
 		Workdays2Title:    workdays2Title,
 		Workdays2Label:    workdays2Label,
 		Workdays2:         workdays2_str,
 		StartDate2Label:   startDate2Label,
-		StartDate2:        date2str(cal2, startDate2),
+		StartDate2:        date2str(cal2, getDate(startDate2)),
 		EndDate2Label:     endDate2Label,
-		EndDate2:          date2str(cal2, endDate2),
-		Weeks2:            fmt.Sprintf("%.1f", endDate2.Sub(startDate2).Hours() / (7*24)),
+		EndDate2:          date2str(cal2, getDate(endDate2)),
+		Weeks2:            fmt.Sprintf("%.1f", getDate(endDate2).Sub(getDate(startDate2)).Hours() / (7*24)),
 	})
 	if err != nil {
 		log.Println("Error executing template:", err)
