@@ -36,38 +36,40 @@ spec:
           value: "Homeoffice Days Germany"
         - name: MESSAGE
           value: "Survived working days in homeoffice"
+        - name: DISPLAY_WORKDAY
+          value: "1"
+        - name: COUNTRY
+          value: "Germany"
+        - name: STATE
+          value: "Bayern"
         - name: COUNTRY
           value: "Germany"
         - name: STATE
           value: "Bayern"
         - name: WORKDAYS_TITLE
-          value: "Germany"
+          value: "Remaining (Germany, best guess)"
         - name: WORKDAYS_LABEL
           value: "Workdays"
         - name: STARTDATE_LABEL
-          value: "Since"
-        - name: STARTDATE
-          value: "2020-03-13"
-        - name: ENDDATE_LABEL
           value: "Today"
-        #- name: ENDDATE
-        #  value: "2020-0X-XX"
-        - name: COUNTRY1
-          value: "Germany"
-        - name: STATE1
-          value: "Bayern"
+        #- name: STARTDATE
+        #  value: "2020-03-13"
+        - name: ENDDATE_LABEL
+          value: "Until"
+        - name: ENDDATE
+          value: "2020-05-01"
         - name: WORKDAYS1_TITLE
-          value: "Remaining (Germany, best guess)"
+          value: "Germany"
         - name: WORKDAYS1_LABEL
           value: "Workdays"
         - name: STARTDATE1_LABEL
-          value: "Today"
-        #- name: STARTDATE1
-        #  value: "2020-03-13"
+          value: "Since"
+        - name: STARTDATE1
+          value: "2020-03-13"
         - name: ENDDATE1_LABEL
-          value: "Until"
-        - name: ENDDATE1
-          value: "2020-04-30"
+          value: "Today"
+        #- name: ENDDATE1
+        #  value: "2020-0X-XX"
         - name: COUNTRY2
           value: "China"
         #- name: STATE2

@@ -31,7 +31,7 @@
       </div>
       <div class="content">
 	<div id="message">
-	  {{.Message}}: {{.Workdays}}
+	  {{.Message}}: {{.MessageNr}}
 	</div>
 	<div id="info">
 	  <table>

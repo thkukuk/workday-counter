@@ -59,6 +59,7 @@ var (
 	endDate2 time.Time
 	dir *string
 	zero_time time.Time
+	displayWorkday = 0
 )
 
 func init() {
@@ -114,6 +115,9 @@ func main() {
 	}
 	if len(os.Getenv("MESSAGE")) > 0 {
 		message = os.Getenv("MESSAGE")
+	}
+	if len(os.Getenv("DISPLAY_WORKDAY")) > 0 {
+		displayWorkday, _ = strconv.Atoi(os.Getenv("DISPLAY_WORKDAY"))
 	}
 	if len(os.Getenv("COUNTRY")) > 0 {
 		country = os.Getenv("COUNTRY")
@@ -207,6 +211,7 @@ func main() {
 type TemplateArgs struct {
 	Title           string
 	Message         string
+	MessageNr       string
 	WorkdaysTitle   string
 	WorkdaysLabel   string
         Workdays        string
@@ -263,9 +268,20 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		workdays2_str = strconv.FormatInt(workdays2, 10)
 	}
 
+	var messageNr int64
+	switch displayWorkday {
+	case 0:
+		messageNr = workdays;
+	case 1:
+		messageNr = workdays1;
+	case 2:
+		messageNr = workdays2;
+	}
+
 	err := indexTemplate.Execute(w, TemplateArgs{
 		Title:             title,
 		Message:           message,
+		MessageNr:         strconv.FormatInt(messageNr, 10),
 		WorkdaysTitle:     workdaysTitle,
 		WorkdaysLabel:     workdaysLabel,
 		Workdays:          strconv.FormatInt(workdays, 10),
