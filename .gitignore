@@ -10,3 +10,4 @@ vendor/
 bin/
 *~
 workday-counter-*.tar.*
+go.sum
