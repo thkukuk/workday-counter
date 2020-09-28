@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: workday-counter
-        image: registry.opensuse.org/home/kukuk/container/container/workday-counter:latest
+        image: registry.opensuse.org/home/kukuk/container/workday-counter:latest
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
@@ -53,7 +53,7 @@ spec:
         - name: ENDDATE_LABEL
           value: "Until"
         - name: ENDDATE
-          value: "2020-06-15"
+          value: "2020-12-31"
         - name: COUNTRY1
           value: "Germany"
         - name: STATE1
