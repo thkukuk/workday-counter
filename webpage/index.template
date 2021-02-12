@@ -1,6 +1,6 @@
 <html>
   <head>
-    <meta http-equiv="refresh" content="{{.Refresh}}"/>
+    <meta http-equiv="refresh" content="{{.RefreshPage}}"/>
     <title>{{.Title}}</title>
   </head>
   <body>
