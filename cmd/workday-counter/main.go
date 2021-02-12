@@ -60,6 +60,7 @@ var (
 	dir *string
 	zero_time time.Time
 	displayWorkday = 0
+	refreshPage = "21600" // Refresh every 6 hours
 )
 
 func init() {
@@ -192,6 +193,9 @@ func main() {
 	if len(os.Getenv("ENDDATE2_LABEL")) > 0 {
 		endDate2Label = os.Getenv("ENDDATE2_LABEL")
 	}
+	if len(os.Getenv("REFRESH_PAGE")) > 0 {
+		refreshPage = os.Getenv("REFRESH_PAGE")
+	}
 
 	log.Printf("Workday-Counter %s started\n", version)
 	http.HandleFunc("/", indexHandler)
@@ -236,6 +240,7 @@ type TemplateArgs struct {
 	EndDate2Label   string
 	EndDate2        string
 	Weeks2          string
+	RefreshPage     string
 }
 
 func getDate(date time.Time) time.Time {
@@ -280,6 +285,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := indexTemplate.Execute(w, TemplateArgs{
 		Title:             title,
+		RefreshPage:       refreshPage,
 		Message:           message,
 		MessageNr:         strconv.FormatInt(messageNr, 10),
 		WorkdaysTitle:     workdaysTitle,
