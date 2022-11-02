@@ -25,7 +25,10 @@ import (
 	"strings"
 	"fmt"
 
-	"github.com/rickar/cal"
+	"github.com/rickar/cal/v2"
+	"github.com/rickar/cal/v2/cz"
+	"github.com/rickar/cal/v2/de"
+	"github.com/rickar/cal/v2/us"
 )
 
 var (
@@ -68,25 +71,20 @@ func init() {
 }
 
 func CalcBusinessDays(country string, state string,
-	from time.Time, to time.Time) (int64, *cal.Calendar) {
+	from time.Time, to time.Time) (int64, *cal.BusinessCalendar) {
 
-	c := cal.NewCalendar()
-	// change the holiday calculation behavior
-	c.Observed = cal.ObservedExact
+	c := cal.NewBusinessCalendar()
 
 	if strings.EqualFold(country, "Germany") {
-		// add holidays for the business
-		cal.AddGermanHolidays(c)
 		if strings.EqualFold(state, "Bayern") {
-			// Nuremberg does not have Maria Himmelfahrt...
-			c.AddHoliday(
-				cal.DEHeiligeDreiKoenige,
-				cal.DEFronleichnam,
-				// cal.DEMariaHimmelfahrt,
-				cal.DEAllerheiligen,
-				cal.DEReformationstag2017,
-			)
+			c.Holidays = de.HolidaysBY
+		} else {
+			c.Holidays = de.Holidays
 		}
+	} else if strings.EqualFold(country, "US") {
+		c.Holidays = us.Holidays
+	} else if strings.EqualFold(country, "Czechia") {
+		c.Holidays = cz.Holidays
 	} else if strings.EqualFold(country, "China") {
 		// Chinese holiday definition is missing
 	} else {
@@ -94,10 +92,10 @@ func CalcBusinessDays(country string, state string,
 			country)
 	}
 
-	return c.CountWorkdays(from, to), c
+	return int64(c.WorkdaysInRange(from, to)), c
 }
 
-func date2str(cal *cal.Calendar, date time.Time) string {
+func date2str(cal *cal.BusinessCalendar, date time.Time) string {
 	if cal == nil {
 		return ""
 	}
@@ -253,10 +251,10 @@ func getDate(date time.Time) time.Time {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var workdays1 int64
 	var workdays1_str string
-	var cal1 *cal.Calendar
+	var cal1 *cal.BusinessCalendar
 	var workdays2 int64
 	var workdays2_str string
-	var cal2 *cal.Calendar
+	var cal2 *cal.BusinessCalendar
 
 	workdays, cal := CalcBusinessDays(country, state,
 		getDate(startDate), getDate(endDate))

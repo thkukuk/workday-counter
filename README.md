@@ -5,11 +5,11 @@ workday-counter POD
 
 This POD consist of a container image which can be deployed on a
 Kubernetes cluster and accessed via a load balancer. It displays:
-  * The SUSE and openSUSE Kubic logos
+  * The SUSE and openSUSE MicroOS logos
   * A message with the number of working days
   * Start and end date
 
-The default port is 80 and can be changed in the service section of the yaml
+The default port is 8080 and can be changed in the service section of the yaml
 file. 
 
 To deploy: ``kubectl apply -f https://raw.githubusercontent.com/thkukuk/workday-counter/master/yaml/workday-counter.yaml``
